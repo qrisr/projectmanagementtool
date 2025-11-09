@@ -4,6 +4,7 @@ import { Task } from '@/types/kanban'
 import { useState } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { PromptModal } from './PromptModal'
 
 interface CardProps {
   task: Task
@@ -16,6 +17,9 @@ export function Card({ task, onDelete, onUpdate }: CardProps) {
   const [editedTitle, setEditedTitle] = useState(task.title)
   const [editedDescription, setEditedDescription] = useState(task.description)
   const [showOptions, setShowOptions] = useState(false)
+  const [isGeneratingPrompt, setIsGeneratingPrompt] = useState(false)
+  const [generatedPrompt, setGeneratedPrompt] = useState('')
+  const [showPromptModal, setShowPromptModal] = useState(false)
 
   const {
     attributes,
@@ -47,6 +51,32 @@ export function Card({ task, onDelete, onUpdate }: CardProps) {
     setEditedTitle(task.title)
     setEditedDescription(task.description)
     setIsEditing(false)
+  }
+
+  const handleGeneratePrompt = async () => {
+    setIsGeneratingPrompt(true)
+    try {
+      const response = await fetch('/api/generate-prompt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cardTitle: task.title }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to generate prompt')
+      }
+
+      const data = await response.json()
+      setGeneratedPrompt(data.prompt)
+      setShowPromptModal(true)
+    } catch (error) {
+      console.error('Error generating prompt:', error)
+      alert('Failed to generate prompt. Please check your OpenAI API key.')
+    } finally {
+      setIsGeneratingPrompt(false)
+    }
   }
 
   if (isEditing) {
@@ -117,18 +147,50 @@ export function Card({ task, onDelete, onUpdate }: CardProps) {
               </p>
             )}
           </div>
-          <button
-            onClick={() => setShowOptions(!showOptions)}
-            className="opacity-0 group-hover:opacity-100 flex-shrink-0 p-1 text-gray-400 hover:text-gray-600 rounded transition-all"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="currentColor"
-              viewBox="0 0 20 20"
+          <div className="flex gap-1 flex-shrink-0">
+            <button
+              onClick={handleGeneratePrompt}
+              disabled={isGeneratingPrompt}
+              className="p-1 text-amber-500 hover:text-amber-600 hover:bg-amber-50 rounded transition-all disabled:opacity-50"
+              title="Generate AI prompt for this feature"
             >
-              <path d="M10 6a2 2 0 11-4 0 2 2 0 014 0zM10 12a2 2 0 11-4 0 2 2 0 014 0zM10 18a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-          </button>
+              {isGeneratingPrompt ? (
+                <svg
+                  className="w-4 h-4 animate-spin"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.343a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM15.657 14.657a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM11 17a1 1 0 110-2v1a1 1 0 11-2 0v-1a1 1 0 112 0v1zM5.343 15.657a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM2 10a1 1 0 01-1 1H0a1 1 0 110-2h1a1 1 0 011 1zM5.343 5.343a1 1 0 001.414-1.414L6.05 3.222a1 1 0 00-1.414 1.414l.707.707z" />
+                </svg>
+              )}
+            </button>
+            <button
+              onClick={() => setShowOptions(!showOptions)}
+              className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-gray-600 rounded transition-all"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M10 6a2 2 0 11-4 0 2 2 0 014 0zM10 12a2 2 0 11-4 0 2 2 0 014 0zM10 18a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         {showOptions && (
@@ -154,6 +216,13 @@ export function Card({ task, onDelete, onUpdate }: CardProps) {
           </div>
         )}
       </div>
+
+      <PromptModal
+        isOpen={showPromptModal}
+        prompt={generatedPrompt}
+        cardTitle={task.title}
+        onClose={() => setShowPromptModal(false)}
+      />
     </div>
   )
 }
