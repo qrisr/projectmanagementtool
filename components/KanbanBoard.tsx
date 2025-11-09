@@ -21,6 +21,7 @@ import { BoardState, Column as ColumnType, Task } from '@/types/kanban'
 import { loadBoardState, saveBoardState, generateId } from '@/lib/storage'
 import { Column } from './Column'
 import { Card } from './Card'
+import { ThemeToggle } from './ThemeToggle'
 
 export function KanbanBoard() {
   const [boardState, setBoardState] = useState<BoardState | null>(null)
@@ -251,7 +252,7 @@ export function KanbanBoard() {
   if (!boardState) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500 dark:text-gray-400">Loading...</div>
       </div>
     )
   }
@@ -263,15 +264,18 @@ export function KanbanBoard() {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="min-h-screen p-6 md:p-8 bg-gradient-to-br from-purple-50 via-white to-blue-50">
+      <div className="min-h-screen p-6 md:p-8">
         {/* Header */}
-        <div className="mb-8 max-w-full">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Project Board
-          </h1>
-          <p className="text-gray-600">
-            Organize your tasks and track progress with ease
-          </p>
+        <div className="mb-8 max-w-full flex items-start justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+              Project Board
+            </h1>
+            <p className="text-gray-600 dark:text-gray-300">
+              Organize your tasks and track progress with ease
+            </p>
+          </div>
+          <ThemeToggle />
         </div>
 
         {/* Kanban Board */}
@@ -298,14 +302,14 @@ export function KanbanBoard() {
           {/* Add Column Button */}
           <div className="flex-shrink-0">
             {isAddingColumn ? (
-              <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 w-[300px] space-y-3 animate-slide-up">
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 w-[300px] space-y-3 animate-slide-up">
                 <input
                   autoFocus
                   type="text"
                   value={newColumnTitle}
                   onChange={(e) => setNewColumnTitle(e.target.value)}
                   placeholder="Column name..."
-                  className="w-full text-sm font-medium text-gray-900 bg-gray-50 rounded px-3 py-2 border border-gray-200"
+                  className="w-full text-sm font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded px-3 py-2 border border-gray-200 dark:border-gray-600"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') handleAddColumn()
                     if (e.key === 'Escape') {
@@ -327,7 +331,7 @@ export function KanbanBoard() {
                       setIsAddingColumn(false)
                       setNewColumnTitle('')
                     }}
-                    className="flex-1 px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors"
+                    className="flex-1 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors"
                   >
                     Cancel
                   </button>
@@ -336,11 +340,11 @@ export function KanbanBoard() {
             ) : (
               <button
                 onClick={() => setIsAddingColumn(true)}
-                className="w-[300px] h-full min-h-[200px] flex items-center justify-center rounded-xl border-2 border-dashed border-purple-300 hover:border-purple-500 bg-gradient-to-b from-purple-50 to-purple-100 hover:bg-gradient-to-b hover:from-purple-100 hover:to-purple-200 transition-all duration-200 group"
+                className="w-[300px] h-full min-h-[200px] flex items-center justify-center rounded-xl border-2 border-dashed border-purple-300 dark:border-purple-700 hover:border-purple-500 dark:hover:border-purple-500 bg-gradient-to-b from-purple-50 to-purple-100 dark:from-gray-800 dark:to-gray-700 hover:bg-gradient-to-b hover:from-purple-100 hover:to-purple-200 dark:hover:from-gray-700 dark:hover:to-gray-600 transition-all duration-200 group"
               >
                 <div className="text-center">
                   <svg
-                    className="w-8 h-8 text-purple-400 group-hover:text-purple-600 mx-auto mb-2 group-hover:scale-110 transition-transform"
+                    className="w-8 h-8 text-purple-400 dark:text-purple-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 mx-auto mb-2 group-hover:scale-110 transition-transform"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -352,7 +356,7 @@ export function KanbanBoard() {
                       d="M12 4v16m8-8H4"
                     />
                   </svg>
-                  <p className="text-sm font-medium text-purple-600 group-hover:text-purple-700">
+                  <p className="text-sm font-medium text-purple-600 dark:text-purple-400 group-hover:text-purple-700 dark:group-hover:text-purple-300">
                     Add Column
                   </p>
                 </div>
@@ -365,12 +369,12 @@ export function KanbanBoard() {
       {/* Drag Overlay for smooth drag preview */}
       <DragOverlay>
         {activeTask ? (
-          <div className="bg-white rounded-lg shadow-2xl border border-purple-300 p-4 max-w-[300px] opacity-95">
-            <h3 className="text-sm font-medium text-gray-900">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-purple-300 dark:border-purple-600 p-4 max-w-[300px] opacity-95">
+            <h3 className="text-sm font-medium text-gray-900 dark:text-white">
               {activeTask.title}
             </h3>
             {activeTask.description && (
-              <p className="text-xs text-gray-600 mt-2">
+              <p className="text-xs text-gray-600 dark:text-gray-300 mt-2">
                 {activeTask.description}
               </p>
             )}

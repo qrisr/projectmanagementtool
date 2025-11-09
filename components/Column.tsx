@@ -52,24 +52,24 @@ export function Column({
   }
 
   return (
-    <div className="flex flex-col bg-gradient-to-b from-gray-50 to-white rounded-xl border border-gray-200 shadow-sm h-full min-w-[300px] max-w-[350px]">
+    <div className="flex flex-col bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm h-full min-w-[300px] max-w-[350px]">
       {/* Column Header */}
-      <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-gray-200">
+      <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-3 flex-1">
           <div className="flex items-center gap-2">
             <div className={`w-3 h-3 rounded-full ${column.color} opacity-80`} />
-            <h2 className="text-sm font-semibold text-gray-900">
+            <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
               {column.title}
             </h2>
           </div>
-          <span className="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-200 rounded-full">
+          <span className="px-2 py-0.5 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 rounded-full">
             {tasks.length}
           </span>
         </div>
         {column.id !== 'todo' && column.id !== 'in-progress' && column.id !== 'completed' && (
           <button
             onClick={() => setShowColumnOptions(!showColumnOptions)}
-            className="p-1 text-gray-400 hover:text-gray-600 rounded transition-colors"
+            className="p-1 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 rounded transition-colors"
           >
             <svg
               className="w-4 h-4"
@@ -81,13 +81,13 @@ export function Column({
           </button>
         )}
         {showColumnOptions && (
-          <div className="absolute right-5 top-16 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+          <div className="absolute right-5 top-16 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
             <button
               onClick={() => {
                 onDeleteColumn(column.id)
                 setShowColumnOptions(false)
               }}
-              className="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left rounded-lg transition-colors"
+              className="w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-left rounded-lg transition-colors"
             >
               Delete Column
             </button>
@@ -116,7 +116,7 @@ export function Column({
       </div>
 
       {/* Add Task Section */}
-      <div className="border-t border-gray-200 px-4 py-3">
+      <div className="border-t border-gray-200 dark:border-gray-700 px-4 py-3">
         {isAddingTask ? (
           <div className="space-y-2 animate-slide-up">
             <input
@@ -125,7 +125,7 @@ export function Column({
               value={newTaskTitle}
               onChange={(e) => setNewTaskTitle(e.target.value)}
               placeholder="Task title..."
-              className="w-full text-sm font-medium text-gray-900 bg-gray-50 rounded px-3 py-2 border border-gray-200 focus:border-purple-300 focus:ring-2 focus:ring-purple-100"
+              className="w-full text-sm font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded px-3 py-2 border border-gray-200 dark:border-gray-600 focus:border-purple-300 dark:focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-900"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   if (newTaskTitle.trim()) {
@@ -143,7 +143,7 @@ export function Column({
               value={newTaskDescription}
               onChange={(e) => setNewTaskDescription(e.target.value)}
               placeholder="Add notes (optional)..."
-              className="w-full text-xs text-gray-600 bg-gray-50 rounded px-3 py-2 border border-gray-200 focus:border-purple-300 focus:ring-2 focus:ring-purple-100 resize-none h-16"
+              className="w-full text-xs text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded px-3 py-2 border border-gray-200 dark:border-gray-600 focus:border-purple-300 dark:focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-900 resize-none h-16"
             />
             <div className="flex gap-2">
               <button
@@ -159,7 +159,7 @@ export function Column({
                   setNewTaskTitle('')
                   setNewTaskDescription('')
                 }}
-                className="flex-1 px-3 py-2 text-xs font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors"
+                className="flex-1 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors"
               >
                 Cancel
               </button>
@@ -168,7 +168,7 @@ export function Column({
         ) : (
           <button
             onClick={() => setIsAddingTask(true)}
-            className="w-full px-4 py-2.5 text-sm font-medium text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors flex items-center justify-center gap-2 group"
+            className="w-full px-4 py-2.5 text-sm font-medium text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors flex items-center justify-center gap-2 group"
           >
             <svg
               className="w-4 h-4 group-hover:scale-110 transition-transform"

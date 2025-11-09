@@ -54,7 +54,7 @@ export function Card({ task, onDelete, onUpdate }: CardProps) {
       <div
         ref={setNodeRef}
         style={style}
-        className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 space-y-3 animate-slide-up"
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 space-y-3 animate-slide-up"
       >
         <input
           autoFocus
@@ -62,7 +62,7 @@ export function Card({ task, onDelete, onUpdate }: CardProps) {
           value={editedTitle}
           onChange={(e) => setEditedTitle(e.target.value)}
           placeholder="Task title..."
-          className="w-full text-sm font-medium text-gray-900 bg-gray-50 rounded px-2 py-1 border border-gray-200"
+          className="w-full text-sm font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded px-2 py-1 border border-gray-200 dark:border-gray-600"
           onKeyDown={(e) => {
             if (e.key === 'Enter') handleSave()
             if (e.key === 'Escape') handleCancel()
@@ -72,7 +72,7 @@ export function Card({ task, onDelete, onUpdate }: CardProps) {
           value={editedDescription}
           onChange={(e) => setEditedDescription(e.target.value)}
           placeholder="Add notes..."
-          className="w-full text-xs text-gray-600 bg-gray-50 rounded px-2 py-1 border border-gray-200 resize-none h-20"
+          className="w-full text-xs text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded px-2 py-1 border border-gray-200 dark:border-gray-600 resize-none h-20"
           onKeyDown={(e) => {
             if (e.key === 'Escape') handleCancel()
           }}
@@ -86,7 +86,7 @@ export function Card({ task, onDelete, onUpdate }: CardProps) {
           </button>
           <button
             onClick={handleCancel}
-            className="flex-1 px-2 py-1 text-xs font-medium text-gray-600 bg-gray-200 hover:bg-gray-300 rounded transition-colors"
+            className="flex-1 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded transition-colors"
           >
             Cancel
           </button>
@@ -104,22 +104,22 @@ export function Card({ task, onDelete, onUpdate }: CardProps) {
       <div
         {...attributes}
         {...listeners}
-        className="bg-white rounded-lg shadow-sm hover:shadow-md border border-gray-200 hover:border-purple-300 p-4 cursor-grab active:cursor-grabbing transition-all duration-200"
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 p-4 cursor-grab active:cursor-grabbing transition-all duration-200"
       >
         <div className="flex justify-between items-start gap-2">
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium text-gray-900 break-words">
+            <h3 className="text-sm font-medium text-gray-900 dark:text-white break-words">
               {task.title}
             </h3>
             {task.description && (
-              <p className="text-xs text-gray-600 mt-2 break-words line-clamp-3">
+              <p className="text-xs text-gray-600 dark:text-gray-300 mt-2 break-words line-clamp-3">
                 {task.description}
               </p>
             )}
           </div>
           <button
             onClick={() => setShowOptions(!showOptions)}
-            className="opacity-0 group-hover:opacity-100 flex-shrink-0 p-1 text-gray-400 hover:text-gray-600 rounded transition-all"
+            className="opacity-0 group-hover:opacity-100 flex-shrink-0 p-1 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 rounded transition-all"
           >
             <svg
               className="w-4 h-4"
@@ -132,13 +132,13 @@ export function Card({ task, onDelete, onUpdate }: CardProps) {
         </div>
 
         {showOptions && (
-          <div className="absolute right-0 top-12 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+          <div className="absolute right-0 top-12 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
             <button
               onClick={() => {
                 setIsEditing(true)
                 setShowOptions(false)
               }}
-              className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-left rounded-t-lg transition-colors"
+              className="w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 text-left rounded-t-lg transition-colors"
             >
               Edit
             </button>
@@ -147,7 +147,7 @@ export function Card({ task, onDelete, onUpdate }: CardProps) {
                 onDelete(task.id)
                 setShowOptions(false)
               }}
-              className="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 text-left rounded-b-lg transition-colors"
+              className="w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-left rounded-b-lg transition-colors"
             >
               Delete
             </button>
